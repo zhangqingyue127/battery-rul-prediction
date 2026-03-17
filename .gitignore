@@ -1,17 +1,25 @@
-﻿# 忽略IDE配置文件（PyCharm/VSCode）
+﻿# 屏蔽运行生成的result文件夹（后续运行代码会生成，不上传）
+result/
+
+# 屏蔽训练日志
+training_log.txt
+
+# 屏蔽数据缓存文件
+data/raw/*.npy
+
+# 屏蔽IDE配置
 .idea/
 .vscode/
 
-# 忽略中文路径的无关文件夹（匹配所有中文目录）
-*[一-龥]/
-
-# 原有规则保留（之前的result/figure、result/data_results等）
-result/figure/
-result/data_results/
-training_log.txt
-data/raw/*.npy
+# 屏蔽Python缓存/虚拟环境
 __pycache__/
 *.pyc
 venv/
 Envs/
+
+# 屏蔽中文路径文件夹
+*[一-龥]/
+
+# 系统垃圾文件
 .DS_Store
+*.swp
