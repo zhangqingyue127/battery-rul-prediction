@@ -28,7 +28,9 @@ The core prediction model (XNet) is a lightweight feedforward neural network wit
 
 ### Cauchy Activation Function
 The Cauchy activation function is defined as:
+
 $$ f(x) = \frac{\lambda_1 x}{x^2 + d^2 + \epsilon} + \frac{\lambda_2}{x^2 + d^2 + \epsilon} $$
+
 where:
 - $\lambda_1, \lambda_2$: Adaptive scaling parameters (initialized with normal distribution $\mathcal{N}(0.7, 0.1)$ and $\mathcal{N}(0.1, 0.01)$)
 - $d$: Shape parameter (initialized with $\mathcal{N}(0.5, 0.05)$)
