@@ -1,5 +1,6 @@
-﻿# 忽略 result 下的 data_results 文件夹，保留 figure 文件夹
+﻿# 只忽略 result 下的 data_results（数据文件），保留 figure（图表）
 result/data_results/
+# 其他忽略规则不变
 data/raw/*.npy
 __pycache__/
 *.pyc
