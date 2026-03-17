@@ -1,6 +1,18 @@
-﻿# 只忽略 result 下的 data_results（数据文件），保留 figure（图表）
+﻿# 屏蔽运行生成的可视化结果文件夹（不上传）
+result/figure/
+
+# 屏蔽运行生成的指标数据文件夹（不上传）
 result/data_results/
-# 其他忽略规则不变
+
+# 屏蔽训练日志（不上传）
+training_log.txt
+
+# 屏蔽数据缓存文件（不上传）
 data/raw/*.npy
+
+# 屏蔽Python缓存/虚拟环境（通用规则）
 __pycache__/
 *.pyc
+venv/
+Envs/
+.DS_Store
