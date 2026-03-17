@@ -1,16 +1,15 @@
-﻿# 屏蔽运行生成的可视化结果文件夹（不上传）
+﻿# 忽略IDE配置文件（PyCharm/VSCode）
+.idea/
+.vscode/
+
+# 忽略中文路径的无关文件夹（匹配所有中文目录）
+*[一-龥]/
+
+# 原有规则保留（之前的result/figure、result/data_results等）
 result/figure/
-
-# 屏蔽运行生成的指标数据文件夹（不上传）
 result/data_results/
-
-# 屏蔽训练日志（不上传）
 training_log.txt
-
-# 屏蔽数据缓存文件（不上传）
 data/raw/*.npy
-
-# 屏蔽Python缓存/虚拟环境（通用规则）
 __pycache__/
 *.pyc
 venv/
