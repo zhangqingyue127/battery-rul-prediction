@@ -208,7 +208,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contact
 For questions, technical support, or collaboration inquiries (core code & repository maintenance):
 - **Zhang Qingyue (Core Code Maintainer)**  
-  Email: QingyueZhang_Chloe@outlook.com
+  Email: QingyueZhang_Chloe@outlook.com  
   GitHub: [@zhangqingyue127](https://github.com/zhangqingyue127)  
   Affiliation: School of Computer Science and Artificial Intelligence, Southwestern University of Finance and Economics
 - **GitHub Issues**: [Open an issue](https://github.com/zhangqingyue127/battery-rul-prediction/issues) 
