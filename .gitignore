@@ -1,4 +1,5 @@
-﻿result/
+﻿# 忽略 result 下的 data_results 文件夹，保留 figure 文件夹
+result/data_results/
 data/raw/*.npy
 __pycache__/
 *.pyc
