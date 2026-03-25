@@ -1,7 +1,8 @@
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-
+plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['axes.linewidth'] = 0.5
 def plot_metrics_vs_ratio(ratios, final_results, out_path="."):
     """Plot metrics vs training data ratio (RMSE/MAE/MAPE/R²)"""
     # Config
@@ -17,22 +18,21 @@ def plot_metrics_vs_ratio(ratios, final_results, out_path="."):
 
     # Style
     style_dict = {
-        'cauchy':      {'color': '#e66d50', 'marker': 'D', 'linewidth': 1.8, 'markersize': 5, 'label': 'Cauchy'},
-        'tanh':        {'color': '#e7c66b', 'marker': 'o', 'linewidth': 1.2, 'markersize': 5, 'label': 'Tanh'},
-        'relu':        {'color': '#297270', 'marker': 's', 'linewidth': 1.5, 'markersize': 5, 'label': 'ReLU'},
-        'gelu':        {'color': '#299d8f', 'marker': 'v', 'linewidth': 1.2, 'markersize': 5, 'label': 'GELU'},
-        'leaky_relu':  {'color': '#8ab07c', 'marker': '<', 'linewidth': 1.5, 'markersize': 5, 'label': 'Leaky ReLU'}
+        'cauchy':      {'color': '#e66d50', 'marker': 'D', 'linewidth': 1.2, 'markersize': 3, 'label': 'Cauchy'},
+        'tanh':        {'color': '#e7c66b', 'marker': 'o', 'linewidth': 1.0, 'markersize': 3, 'label': 'Tanh'},
+        'relu':        {'color': '#297270', 'marker': 's', 'linewidth': 1.0, 'markersize': 3, 'label': 'ReLU'},
+        'gelu':        {'color': '#299d8f', 'marker': 'v', 'linewidth': 1.0, 'markersize': 3, 'label': 'GELU'},
+        'leaky_relu':  {'color': '#8ab07c', 'marker': '<', 'linewidth': 1.0, 'markersize': 3, 'label': 'Leaky ReLU'}
     }
     ratio_labels = [f'{int(r * 100)}%' for r in ratios]
     n_ratios = len(ratio_labels)
 
     # Plot
     fig, axes = plt.subplots(2, 2, figsize=(12, 8), dpi=500)
-    fig.suptitle('Model Performance vs. Training Data Ratio', fontsize=16, fontweight='bold', y=0.98)
     axes = axes.flatten()
 
     # Adjust subplot spacing (reserve more space for x-axis)
-    plt.subplots_adjust(left=0.08, right=0.92, bottom=0.12, top=0.92, wspace=0.35, hspace=0.4)
+    plt.subplots_adjust(left=0.08, right=0.92, bottom=0.12, top=0.92, wspace=0.2, hspace=0.4)
 
     # Plot each subplot
     for idx, (ax, metric) in enumerate(zip(axes, metrics_order)):
@@ -41,7 +41,7 @@ def plot_metrics_vs_ratio(ratios, final_results, out_path="."):
         # Shorten x-axis tick interval (default 1, changed to 0.8x)
         x_ticks_pos = np.arange(n_ratios) * 0.8  # Shortened tick positions
         ax.set_xticks(x_ticks_pos)
-        ax.set_xticklabels(ratio_labels, fontsize=9)
+        ax.set_xticklabels(ratio_labels, fontsize=8)
 
         # Extend x-axis range (reserve 20% more space on the right for annotations)
         x_max = (n_ratios - 1) * 0.8 * 1.2
@@ -99,11 +99,10 @@ def plot_metrics_vs_ratio(ratios, final_results, out_path="."):
                 )
 
         # Subplot style
-        ax.set_title(f'{metrics_config[metric]["name"]}', fontsize=12, fontweight='bold', pad=6)
-        ax.set_xlabel('Percentage of Training Data', fontsize=10, labelpad=8)  # Increase labelpad to avoid overlap
-        ax.set_ylabel(metrics_config[metric]['ylabel'], fontsize=10, labelpad=6)
-        ax.grid(True, linestyle='--', alpha=0.6, color='#cccccc', linewidth=0.7, zorder=1)
-        ax.tick_params(axis='both', labelsize=9, width=0.8, length=3)
+        ax.set_xlabel('Percentage of Training Data', fontsize=7, labelpad=8)  # Increase labelpad to avoid overlap
+        ax.set_ylabel(metrics_config[metric]['ylabel'], fontsize=7, labelpad=6)
+        # ax.grid(True, linestyle='--', alpha=0.6, color='#cccccc', linewidth=0.7, zorder=1)
+        ax.tick_params(axis='both', labelsize=8, width=0.8, length=3)
         
         # Y-axis range (only for R²)
         if metric == 'r2' and len(all_valid_values) > 0:
@@ -119,11 +118,7 @@ def plot_metrics_vs_ratio(ratios, final_results, out_path="."):
 
         # Subplot label (centered at the bottom)
         ax.text(0.5, -0.18, labels[idx], transform=ax.transAxes,
-                ha='center', va='top', fontsize=12, fontweight='normal')
-
-        # Turn off legend
-        if ax.get_legend() is not None:
-            ax.legend().remove()
+                ha='center', va='top', fontsize=10)
 
     # Save as PNG format (original)
     png_filename = 'metrics_plot_sci_style.png'
@@ -168,11 +163,10 @@ def plot_boxplot_metrics(final_scores_results, out_path="."):
 
     # Create 2×2 subplots
     fig, axes = plt.subplots(2, 2, figsize=(12, 8), dpi=500)
-    fig.suptitle('Distribution of Metrics Across Activation Functions', fontsize=16, fontweight='bold', y=0.98)
     axes = axes.flatten()
 
     # Adjust subplot spacing
-    plt.subplots_adjust(left=0.08, right=0.92, bottom=0.12, top=0.92, wspace=0.35, hspace=0.4)
+    plt.subplots_adjust(left=0.08, right=0.95, bottom=0.10, top=0.94, wspace=0.2, hspace=0.22)
 
     # Plot boxplot for each metric
     for idx, (ax, metric) in enumerate(zip(axes, metrics_order)):
@@ -206,10 +200,9 @@ def plot_boxplot_metrics(final_scores_results, out_path="."):
             patch.set_alpha(0.7)
 
         # Subplot style
-        ax.set_title(f'Distribution of {metrics_config[metric]["name"]}', fontsize=12, fontweight='bold', pad=6)
-        ax.set_ylabel(metrics_config[metric]['ylabel'], fontsize=10, labelpad=6)
-        ax.grid(True, linestyle='--', alpha=0.6, color='#cccccc', linewidth=0.7, zorder=1)
-        ax.tick_params(axis='both', labelsize=9, width=0.8, length=3)
+        ax.set_ylabel(metrics_config[metric]['ylabel'], fontsize=7, labelpad=6)
+        # ax.grid(True, linestyle='--', alpha=0.6, color='#cccccc', linewidth=0.7, zorder=1)
+        ax.tick_params(axis='both', labelsize=7, width=0.8, length=3)
 
         # Y-axis range (R² adaptive)
         if metric == 'r2':
@@ -229,7 +222,7 @@ def plot_boxplot_metrics(final_scores_results, out_path="."):
 
         # Subplot label (centered at the bottom, consistent with original code)
         ax.text(0.5, -0.1, labels[idx], transform=ax.transAxes,
-                ha='center', va='top', fontsize=12, fontweight='normal')
+                ha='center', va='top', fontsize=10, fontweight='normal')
 
     # Save as PNG and PDF (consistent with original plot_metrics_vs_ratio)
     png_filename = 'metrics_boxplot_sci_style.png'

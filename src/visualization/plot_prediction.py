@@ -1,7 +1,8 @@
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-
+plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['axes.linewidth'] = 0.5
 def visualize_battery_combined(cycle_seq, true_data, pred_dict_all_ratios, battery_name, out_path="."):
     """
     Visualize capacity prediction results for a single battery across different training ratios
@@ -10,16 +11,14 @@ def visualize_battery_combined(cycle_seq, true_data, pred_dict_all_ratios, batte
     """
     # Fixed figure size (visually consistent with metric plots)
     fig, axes = plt.subplots(2, 2, figsize=(12, 8), dpi=500)
-    plt.subplots_adjust(left=0.08, right=0.95, bottom=0.12, top=0.92, wspace=0.3, hspace=0.4)
-    
-    fig.suptitle(f'Battery {battery_name} Capacity Prediction', fontsize=16, fontweight='bold', y=0.98)
+    plt.subplots_adjust(left=0.08, right=0.95, bottom=0.10, top=0.94, wspace=0.2, hspace=0.4)
     
     Rated_Capacity = 2.0
     failure_threshold = Rated_Capacity * 0.7  # 70% of rated capacity as failure threshold
     
     # SCI low-saturation color scheme (consistent with metric plots)
     style_dict = {
-        'cauchy':      {'color': "#fd0303", 'linestyle': '-', 'linewidth': 2.5, 'label': 'Cauchy'},
+        'cauchy':      {'color': "#fd0303", 'linestyle': '-', 'linewidth': 1.0, 'label': 'Cauchy'},
         'tanh':        {'color': '#e7c66b', 'linestyle': '-', 'linewidth': 1.0, 'label': 'Tanh'},
         'relu':        {'color': '#297270', 'linestyle': '-', 'linewidth': 1.0, 'label': 'ReLU'},
         'gelu':        {'color': '#299d8f', 'linestyle': '-', 'linewidth': 1.0, 'label': 'GELU'},
@@ -29,7 +28,7 @@ def visualize_battery_combined(cycle_seq, true_data, pred_dict_all_ratios, batte
     # Core logic of adaptive axes for each subplot
     def plot_subplot(ax, ratio, label):
         # Plot true capacity values (top layer for visibility)
-        ax.plot(cycle_seq, true_data, 'k-', linewidth=1.5, label='True Capacity', zorder=20)
+        ax.plot(cycle_seq, true_data, 'k-', linewidth=1.0, label='True Capacity', zorder=20)
         
         # Calculate train/test split point
         split_idx = int(len(true_data) * ratio)
@@ -75,22 +74,21 @@ def visualize_battery_combined(cycle_seq, true_data, pred_dict_all_ratios, batte
         ax.set_ylim(y_min, y_max)
         
         # Subplot title (only show training ratio)
-        ax.set_title(f'Train Ratio: {int(ratio*100)}%', fontsize=12, fontweight='bold', pad=6)
-        ax.set_xlabel('Cycle Number (Real)', fontsize=10, labelpad=6)
-        ax.set_ylabel('Capacity (Ah)', fontsize=10, labelpad=6)
+        ax.set_xlabel('Cycle Number (Real)', fontsize=7, labelpad=6)
+        ax.set_ylabel('Capacity (Ah)', fontsize=7, labelpad=6)
         
         # Grid and tick style
-        ax.grid(True, linestyle='--', alpha=0.6, color='#cccccc', linewidth=0.7)
-        ax.tick_params(axis='both', labelsize=9, width=0.8, length=3)
+        # ax.grid(True, linestyle='--', alpha=0.6, color='#cccccc', linewidth=0.7)
+        ax.tick_params(axis='both', labelsize=8, width=0.8, length=3)
         
         # Subplot label (a/b/c/d) centered at bottom
         ax.text(0.5, -0.18, label, transform=ax.transAxes,
-                ha='center', va='top', fontsize=12)
+                ha='center', va='top', fontsize=10)
         
         # Legend configuration
-        ax.legend(loc='upper right', fontsize=9, frameon=True, 
+        ax.legend(loc='upper right', fontsize=7, frameon=True, 
                   bbox_to_anchor=(1.0, 1.0), handlelength=1.0, 
-                  edgecolor='black', facecolor='white', framealpha=0.9)
+                  edgecolor='#B0B0B0', facecolor='white', framealpha=0.9)
     
     # Plot 4 subplots with different training ratios and labels
     plot_subplot(axes[0,0], 0.4, '(a)')

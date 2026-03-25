@@ -1,21 +1,14 @@
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-
+plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['axes.linewidth'] = 0.5
 def plot_activation_characteristics(out_path="."):
     """
     Plot characteristic curves of five activation functions: Cauchy / ReLU / Tanh / GELU / Leaky ReLU
     Input: None (directly calculate the output of each activation function)
     Output: Single figure (saved as PNG/PDF)
     """
-    # Style configuration
-    plt.rcParams['font.family'] = 'Times New Roman'
-    plt.rcParams['font.size'] = 12
-    plt.rcParams['axes.linewidth'] = 1.0
-    plt.rcParams['grid.linewidth'] = 0.8
-    plt.rcParams['xtick.direction'] = 'in'
-    plt.rcParams['ytick.direction'] = 'in'
-
     # 1. Generate input x
     x = np.linspace(-3, 3, 200)
 
@@ -58,16 +51,15 @@ def plot_activation_characteristics(out_path="."):
             linewidth=style_dict['leaky_relu']['linewidth'], label=style_dict['leaky_relu']['label'])
 
     # 4. Figure style (exactly the same as your example figure)
-    ax.set_title('Activation Function Characteristics', fontsize=18, fontweight='bold', pad=15)
-    ax.set_xlabel('Input Value', fontsize=14, labelpad=10)
-    ax.set_ylabel('Output Value', fontsize=14, labelpad=10)
+    ax.set_xlabel('Input Value', fontsize=10, labelpad=10)
+    ax.set_ylabel('Output Value', fontsize=10, labelpad=10)
     ax.set_xlim(-3.2, 3.2)
     ax.set_ylim(-1.5, 1.5)
     ax.axhline(y=0, color='gray', linestyle='--', linewidth=1.0)
     ax.axvline(x=0, color='gray', linestyle='--', linewidth=1.0)
-    ax.grid(True, linestyle='--', alpha=0.6, color='#cccccc', linewidth=0.7)
-    ax.tick_params(axis='both', labelsize=12, width=0.8, length=3)
-    ax.legend(loc='upper left', fontsize=12, frameon=True, edgecolor='black', facecolor='white')
+    #ax.grid(True, linestyle='--', alpha=0.6, color='#cccccc', linewidth=0.7)
+    ax.tick_params(axis='both', labelsize=9, width=0.8, length=3)
+    ax.legend(loc='upper left', fontsize=10, frameon=True, edgecolor='#B0B0B0', facecolor='white')
 
     # 5. Save as PNG and PDF (consistent with your other figures)
     png_filename = 'activation_function_characteristics.png'
