@@ -12,11 +12,11 @@ Lithium-ion battery remaining useful life (RUL) prediction is a core technology 
 ## Authors
 | Name               | Role                                  | GitHub Profile                          |
 |--------------------|---------------------------------------|----------------------------------------|
-| **Qu Jinyan**      | Team Coordinator, XNet Architecture Design & Analysis | - |
-| **Zhang Qingyue**  | Algorithm Implementation, Model Construction & Debugging (Core Code) | [@zhangqingyue127](https://github.com/zhangqingyue127) |
-| **Xu Xiaoying**    | Cauchy Activation Function Interpretation & Analysis | - |
-| **Li Xingyu**      | Evaluation Metrics Design & Data Visualization (Associate Programming) | - |
-| **Zou Yalan**      | Data Collection & Preprocessing (Associate Programming)      | - |
+| **Qu Jinyan**      | Team Coordinator, XNet Architecture Design & Analysis | [@jinyan1qv-ui](https://github.com/jinyan1qv-ui) |
+| **Zhang Qingyue**  | Algorithm Implementation, Model Construction & Debugging, Data Visualization (Core Code) | [@zhangqingyue127](https://github.com/zhangqingyue127) |
+| **Xu Xiaoying**    | Cauchy Activation Function Interpretation & Analysis & Paper Writing | - |
+| **Li Xingyu**      | Evaluation Metrics Design & Paper Writing (Associate Programming) | - |
+| **Zou Yalan**      | Data Collection & Preprocessing & Paper Writing (Associate Programming)      | - |
 
 ## Framework Overview
 ### Model Architecture
@@ -28,7 +28,9 @@ The core prediction model (XNet) is a lightweight feedforward neural network wit
 
 ### Cauchy Activation Function
 The Cauchy activation function is defined as:
+
 $$ f(x) = \frac{\lambda_1 x}{x^2 + d^2 + \epsilon} + \frac{\lambda_2}{x^2 + d^2 + \epsilon} $$
+
 where:
 - $\lambda_1, \lambda_2$: Adaptive scaling parameters (initialized with normal distribution $\mathcal{N}(0.7, 0.1)$ and $\mathcal{N}(0.1, 0.01)$)
 - $d$: Shape parameter (initialized with $\mathcal{N}(0.5, 0.05)$)
@@ -37,7 +39,7 @@ where:
 ## Pipeline Overview
 The end-to-end workflow of our battery RUL prediction framework is illustrated below, covering data preparation, model training, validation, and evaluation:
 
-![Battery RUL Prediction Pipeline](result/figure/pipeline_overview.png)
+![Battery RUL Prediction Pipeline](pipeline_overview.png)
 
 ### Pipeline Components
 1. **Data Initialization & Preprocessing**  
