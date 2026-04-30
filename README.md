@@ -16,7 +16,7 @@ Lithium-ion battery remaining useful life (RUL) prediction is a core technology 
 | **Zhang Qingyue**  | Algorithm Implementation, Model Construction & Debugging, Data Visualization (Core Code) | [@zhangqingyue127](https://github.com/zhangqingyue127) |
 | **Xu Xiaoying**    | Cauchy Activation Function Interpretation & Analysis & Paper Writing | - |
 | **Li Xingyu**      | Evaluation Metrics Design & Paper Writing (Associate Programming) | - |
-| **Zou Yalan**      | Data Collection & Preprocessing & Paper Writing (Associate Programming)      | - |
+| **Zou Yalan**      | Data Collection & Preprocessing & Paper Writing (Associate Programming)      | [@Foodie585](https://github.com/Foodie585) |
 
 ## Framework Overview
 ### Model Architecture
