@@ -13,9 +13,6 @@ def visualize_battery_combined(cycle_seq, true_data, pred_dict_all_ratios, batte
     fig, axes = plt.subplots(2, 2, figsize=(12, 8), dpi=500)
     plt.subplots_adjust(left=0.08, right=0.95, bottom=0.10, top=0.94, wspace=0.2, hspace=0.4)
     
-    Rated_Capacity = 2.0
-    failure_threshold = Rated_Capacity * 0.7  # 70% of rated capacity as failure threshold
-    
     # SCI low-saturation color scheme (consistent with metric plots)
     style_dict = {
         'cauchy':      {'color': "#fd0303", 'linestyle': '-', 'linewidth': 1.0, 'label': 'Cauchy'},
@@ -27,26 +24,38 @@ def visualize_battery_combined(cycle_seq, true_data, pred_dict_all_ratios, batte
     
     # Core logic of adaptive axes for each subplot
     def plot_subplot(ax, ratio, label):
-        # Plot true capacity values (top layer for visibility)
-        ax.plot(cycle_seq, true_data, 'k-', linewidth=1.0, label='True Capacity', zorder=20)
-        
         # Calculate train/test split point
         split_idx = int(len(true_data) * ratio)
         if split_idx >= len(cycle_seq):
             split_idx = len(cycle_seq) - 1
-        split_cycle = cycle_seq[split_idx]
+
+        # Stretch the remaining horizon to fill the whole subplot.
+        # For 40%/50%/60%/70% training ratios, this displays only the
+        # remaining 60%/50%/40%/30% segment over the full x-axis range.
+        x_min = min(cycle_seq)
+        x_max = max(cycle_seq)
+        plotted_values = []
+
+        # Plot the true remaining capacity segment as the bold black reference curve.
+        true_segment = true_data[split_idx:]
+        true_cycles = np.linspace(x_min, x_max, len(true_segment))
+        ax.plot(true_cycles, true_segment, 'k-', linewidth=1.5,
+                label='True Capacity', zorder=20)
+        plotted_values.extend(true_segment)
         
         # Plot predicted values for each activation function
         for act, pred_data in pred_dict_all_ratios[ratio].items():
             style = style_dict[act]
             # Only plot predictions for the test phase (after split point)
             pred_data = pred_data[split_idx:]
-            pred_cycles = cycle_seq[split_idx:]
             
-            # Ensure consistent length between cycles and predictions
-            min_len = min(len(pred_cycles), len(pred_data))
-            pred_cycles = pred_cycles[:min_len]
+            # Ensure consistent length with the remaining prediction horizon
+            min_len = min(len(cycle_seq) - split_idx, len(pred_data))
             pred_data = pred_data[:min_len]
+            if min_len == 0:
+                continue
+            pred_cycles = np.linspace(x_min, x_max, min_len)
+            plotted_values.extend(pred_data)
             
             # Plot Cauchy activation on top of other activation functions
             if act == 'cauchy':
@@ -60,21 +69,17 @@ def visualize_battery_combined(cycle_seq, true_data, pred_dict_all_ratios, batte
                         linewidth=style['linewidth'], label=style['label'], 
                         zorder=1)   # Background layer
                 
-        # Plot auxiliary lines (failure threshold and train/test split)
-        ax.axhline(y=failure_threshold, color='gray', linestyle=':', linewidth=1.0, label='Failure Threshold (70%)')
-        ax.axvline(x=split_cycle, color='purple', linestyle='--', linewidth=1.0, label='Train/Test Split')
+        # Adaptive axis limits
+        x_margin = (x_max - x_min) * 0.05
+        ax.set_xlim(x_min - x_margin, x_max + x_margin)
         
-        # Adaptive axis limits (95% margin for better visualization)
-        x_min = min(cycle_seq) * 0.95
-        x_max = max(cycle_seq) * 1.05
-        ax.set_xlim(x_min, x_max)
-        
-        y_min = min(true_data) * 0.95 if min(true_data) > 0 else 0
-        y_max = max(true_data) * 1.05
+        y_source = plotted_values if plotted_values else true_data
+        y_min = min(y_source) * 0.95 if min(y_source) > 0 else 0
+        y_max = max(y_source) * 1.05
         ax.set_ylim(y_min, y_max)
         
         # Subplot title (only show training ratio)
-        ax.set_xlabel('Cycle Number (Real)', fontsize=7, labelpad=6)
+        ax.set_xlabel('Cycle Number', fontsize=7, labelpad=6)
         ax.set_ylabel('Capacity (Ah)', fontsize=7, labelpad=6)
         
         # Grid and tick style
@@ -86,7 +91,7 @@ def visualize_battery_combined(cycle_seq, true_data, pred_dict_all_ratios, batte
                 ha='center', va='top', fontsize=10)
         
         # Legend configuration
-        ax.legend(loc='upper right', fontsize=7, frameon=True, 
+        ax.legend(loc='upper right', fontsize=8, frameon=True, 
                   bbox_to_anchor=(1.0, 1.0), handlelength=1.0, 
                   edgecolor='#B0B0B0', facecolor='white', framealpha=0.9)
     
