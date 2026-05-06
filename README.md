@@ -14,7 +14,7 @@ Lithium-ion battery remaining useful life (RUL) prediction is a core technology 
 |--------------------|---------------------------------------|----------------------------------------|
 | **Qu Jinyan**      | Team Coordinator, XNet Architecture Design & Analysis | [@jinyan1qv-ui](https://github.com/jinyan1qv-ui) |
 | **Zhang Qingyue**  | Algorithm Implementation, Model Construction & Debugging, Data Visualization (Core Code) | [@zhangqingyue127](https://github.com/zhangqingyue127) |
-| **Xu Xiaoying**    | Cauchy Activation Function Interpretation & Analysis & Paper Writing | - |
+| **Xu Xiaoying**    | Cauchy Activation Function Interpretation & Analysis & Paper Writing | [@xu101520](https://github.com/xu101520) |
 | **Li Xingyu**      | Evaluation Metrics Design & Paper Writing (Associate Programming) | [@Twinkle0214](https://github.com/Twinkle0214) |
 | **Zou Yalan**      | Data Collection & Preprocessing & Paper Writing (Associate Programming)      | [@Foodie585](https://github.com/Foodie585) |
 
