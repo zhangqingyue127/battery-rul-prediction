@@ -1,0 +1,79 @@
+Loading cached data from /root/autodl-tmp/battery-rul-xnet/data/raw/NASA_Battery_Data.npy
+
+=== Multi-model comparison with 40% training data ===
+
+--- XNet combo 1: lr=0.008, hidden_dim=64, layers=2, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1888
+
+--- XNet combo 2: lr=0.008, hidden_dim=64, layers=2, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.2064
+
+--- XNet combo 3: lr=0.008, hidden_dim=64, layers=3, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1812
+
+--- XNet combo 4: lr=0.008, hidden_dim=64, layers=3, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1559
+
+--- XNet combo 5: lr=0.008, hidden_dim=128, layers=2, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1816
+
+--- XNet combo 6: lr=0.008, hidden_dim=128, layers=2, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1244
+
+--- XNet combo 7: lr=0.008, hidden_dim=128, layers=3, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1788
+
+--- XNet combo 8: lr=0.008, hidden_dim=128, layers=3, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.3259
+
+--- XNet combo 9: lr=0.01, hidden_dim=64, layers=2, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1209
+
+--- XNet combo 10: lr=0.01, hidden_dim=64, layers=2, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1643
+
+--- XNet combo 11: lr=0.01, hidden_dim=64, layers=3, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1327
+
+--- XNet combo 12: lr=0.01, hidden_dim=64, layers=3, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1719
+
+--- XNet combo 13: lr=0.01, hidden_dim=128, layers=2, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1284
+
+--- XNet combo 14: lr=0.01, hidden_dim=128, layers=2, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1351
+
+--- XNet combo 15: lr=0.01, hidden_dim=128, layers=3, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1273
+
+--- XNet combo 16: lr=0.01, hidden_dim=128, layers=3, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.4738
+
+--- Training FC baseline ---
+    Avg RMSE: 0.4646
+
+--- Training LSTM baseline ---
+    Avg RMSE: 0.0768
+
+--- Training GRU baseline ---
+    Avg RMSE: 0.0836
+
+--- Training CNN baseline ---
+    Avg RMSE: 0.2721
+
+--- Training ResNet baseline ---
+    Avg RMSE: 0.1970
+train_ratio  model battery     rmse
+        40%   LSTM average 0.076830
+        40%    GRU average 0.083610
+        40%   XNet average 0.120893
+        40% ResNet average 0.197048
+        40%    CNN average 0.272138
+        40%     FC average 0.464554
+train_ratio  combo_idx    lr  hidden_dim  num_layers  lambda1  lambda2    d  avg_rmse
+        40%          9 0.010          64           2      0.7      0.1 0.50  0.120893
+        40%          6 0.008         128           2      1.0      0.2 0.75  0.124444
+        40%         15 0.010         128           3      0.7      0.1 0.50  0.127292
+        40%         13 0.010         128           2      0.7      0.1 0.50  0.128353
+        40%         11 0.010          64           3      0.7      0.1 0.50  0.132688

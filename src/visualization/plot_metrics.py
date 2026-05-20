@@ -1,22 +1,101 @@
 import os
+
 import numpy as np
 import matplotlib.pyplot as plt
+
 plt.rcParams['font.family'] = 'Times New Roman'
 plt.rcParams['axes.linewidth'] = 0.5
+
+
+def _adaptive_ylim(values, metric):
+    data_min = float(np.min(values))
+    data_max = float(np.max(values))
+    margin = (data_max - data_min) * 0.2 if data_max > data_min else max(abs(data_max) * 0.05, 1e-4)
+    y_min = data_min - margin
+    y_max = data_max + margin
+    if metric == 'r2':
+        y_min = max(0.9, y_min)
+        y_max = min(1.0, y_max)
+        if y_max - y_min < 0.002:
+            y_min -= 0.001
+            y_max += 0.001
+    return y_min, y_max
+
+
+def _label_positions(endpoints, y_min, y_max, min_gap_fraction=0.055):
+    """Return non-overlapping in-axis label y positions for line-end labels."""
+    if not endpoints:
+        return {}
+
+    span = max(y_max - y_min, 1e-12)
+    min_gap = span * min_gap_fraction
+    padding = span * 0.035
+    lower = y_min + padding
+    upper = y_max - padding
+
+    ordered = sorted(endpoints, key=lambda item: item[2])
+    positions = {}
+    previous_y = lower - min_gap
+    for act, _, end_y in ordered:
+        positions[act] = min(max(end_y, lower), upper)
+        if positions[act] - previous_y < min_gap:
+            positions[act] = previous_y + min_gap
+        previous_y = positions[act]
+
+    overflow = previous_y - upper
+    if overflow > 0:
+        for act, _, _ in ordered:
+            positions[act] -= overflow
+
+    previous_y = upper + min_gap
+    for act, _, _ in reversed(ordered):
+        positions[act] = min(positions[act], previous_y - min_gap)
+        positions[act] = min(max(positions[act], lower), upper)
+        previous_y = positions[act]
+
+    return positions
+
+
+def _draw_end_labels(ax, endpoints, style_dict, x_label):
+    y_min, y_max = ax.get_ylim()
+    positions = _label_positions(endpoints, y_min, y_max)
+    for act, end_x, end_y in endpoints:
+        style = style_dict[act]
+        ax.annotate(
+            style['label'],
+            xy=(end_x, end_y),
+            xytext=(x_label, positions[act]),
+            textcoords='data',
+            color=style['color'],
+            fontsize=8,
+            fontweight='normal',
+            ha='left',
+            va='center',
+            zorder=3,
+            annotation_clip=True,
+            arrowprops=dict(
+                arrowstyle='-',
+                color=style['color'],
+                lw=0.5,
+                alpha=0.75,
+                shrinkA=0,
+                shrinkB=3,
+            ),
+        )
+
+
 def plot_metrics_vs_ratio(ratios, final_results, out_path="."):
-    """Plot metrics vs training data ratio (RMSE/MAE/MAPE/R²)"""
-    # Config
+    """Plot metrics vs training data ratio (RMSE/MAE/MAPE/R2)."""
     metrics_config = {
-        'rmse': {'name': 'RMSE', 'ylim': (0.024, 0.032), 'ylabel': 'Average RMSE (Ah)'},
-        'mae':  {'name': 'MAE',  'ylim': (0.016, 0.024), 'ylabel': 'Average MAE (Ah)'},
-        'mape': {'name': 'MAPE', 'ylim': (1.1, 1.55),   'ylabel': 'Average MAPE (%)'},
-        'r2':   {'name': '$R^2$','ylim': None,          'ylabel': 'Average $R^2$'}
+        'rmse': {'name': 'RMSE', 'ylabel': 'Average RMSE (Ah)'},
+        'mae':  {'name': 'MAE',  'ylabel': 'Average MAE (Ah)'},
+        'mape': {'name': 'MAPE', 'ylabel': 'Average MAPE (%)'},
+        'r2':   {'name': '$R^2$', 'ylabel': 'Average $R^2$'}
     }
     metrics_order = ['rmse', 'mae', 'mape', 'r2']
     labels = ['(a)', '(b)', '(c)', '(d)']
     activation_list = list(final_results.keys())
 
-    # Style
     style_dict = {
         'cauchy':      {'color': '#e66d50', 'marker': 'D', 'linewidth': 1.2, 'markersize': 3, 'label': 'Cauchy'},
         'tanh':        {'color': '#e7c66b', 'marker': 'o', 'linewidth': 1.0, 'markersize': 3, 'label': 'Tanh'},
@@ -27,132 +106,86 @@ def plot_metrics_vs_ratio(ratios, final_results, out_path="."):
     ratio_labels = [f'{int(r * 100)}%' for r in ratios]
     n_ratios = len(ratio_labels)
 
-    # Plot
     fig, axes = plt.subplots(2, 2, figsize=(12, 8), dpi=500)
     axes = axes.flatten()
-
-    # Adjust subplot spacing (reserve more space for x-axis)
     plt.subplots_adjust(left=0.08, right=0.92, bottom=0.12, top=0.92, wspace=0.2, hspace=0.4)
 
-    # Plot each subplot
     for idx, (ax, metric) in enumerate(zip(axes, metrics_order)):
         all_valid_values = []
-        
-        # Shorten x-axis tick interval (default 1, changed to 0.8x)
-        x_ticks_pos = np.arange(n_ratios) * 0.8  # Shortened tick positions
+        endpoints = []
+        x_ticks_pos = np.arange(n_ratios) * 0.8
         ax.set_xticks(x_ticks_pos)
         ax.set_xticklabels(ratio_labels, fontsize=8)
+        last_tick = (n_ratios - 1) * 0.8
+        x_label = last_tick + 0.24
+        ax.set_xlim(-0.2, x_label + 0.55)
 
-        # Extend x-axis range (reserve 20% more space on the right for annotations)
-        x_max = (n_ratios - 1) * 0.8 * 1.2
-        ax.set_xlim(-0.2, x_max)
-
-        # Plot curves + annotations
         for act in activation_list:
-            if act in final_results:
-                values = final_results[act][metric]
-                valid_pairs = [(i, y) for i, y in enumerate(values) if not np.isnan(y)]  # Use index instead of text
-                if not valid_pairs:
-                    continue
-                x_plot, y_plot = zip(*valid_pairs)
-                
-                # Convert to shortened x-axis coordinates
-                x_plot = np.array(x_plot) * 0.8
-                all_valid_values.extend(y_plot)
+            if act not in final_results:
+                continue
+            values = final_results[act][metric]
+            valid_pairs = [(i, y) for i, y in enumerate(values) if not np.isnan(y)]
+            if not valid_pairs:
+                continue
 
-                # Plot curve
-                ax.plot(x_plot, y_plot,
-                        color=style_dict[act]['color'],
-                        marker=style_dict[act]['marker'],
-                        linestyle='-',
-                        linewidth=style_dict[act]['linewidth'],
-                        markersize=style_dict[act]['markersize'],
-                        markeredgecolor='white',
-                        markeredgewidth=0.3,
-                        zorder=2)
+            x_plot, y_plot = zip(*valid_pairs)
+            x_plot = np.array(x_plot) * 0.8
+            all_valid_values.extend(y_plot)
+            style = style_dict[act]
 
-                # Core modification 1: Annotation position control (Cauchy in R² subplot shifted up)
-                last_x = x_plot[-1]
-                last_y = y_plot[-1]
-                
-                # Annotation offset
-                if metric == 'r2' and act == 'cauchy':
-                    annotate_offset = (3, 5)  # R2-Cauchy shifted up
-                elif metric == 'r2' and act == 'gelu':
-                    annotate_offset = (3, -5)  # R2-GELU shifted down
-                else:
-                    annotate_offset = (3, 0)      # Other annotations remain in original position
-                
-                # Core modification 2: All annotation text color changed to match line color
-                ax.annotate(
-                    style_dict[act]['label'],
-                    xy=(last_x, last_y),
-                    xytext=annotate_offset,  # Dynamic offset
-                    textcoords='offset points',
-                    color=style_dict[act]['color'],
-                    fontsize=8,
-                    fontweight='normal',
-                    ha='left',
-                    va='center',
-                    zorder=3,
-                    annotation_clip=False
-                )
+            ax.plot(
+                x_plot,
+                y_plot,
+                color=style['color'],
+                marker=style['marker'],
+                linestyle='-',
+                linewidth=style['linewidth'],
+                markersize=style['markersize'],
+                markeredgecolor='white',
+                markeredgewidth=0.3,
+                zorder=2,
+            )
 
-        # Subplot style
-        ax.set_xlabel('Percentage of Training Data', fontsize=7, labelpad=8)  # Increase labelpad to avoid overlap
+            endpoints.append((act, x_plot[-1], y_plot[-1]))
+
+        ax.set_xlabel('Percentage of Training Data', fontsize=7, labelpad=8)
         ax.set_ylabel(metrics_config[metric]['ylabel'], fontsize=7, labelpad=6)
         # ax.grid(True, linestyle='--', alpha=0.6, color='#cccccc', linewidth=0.7, zorder=1)
         ax.tick_params(axis='both', labelsize=8, width=0.8, length=3)
-        
-        # Y-axis range (only for R²)
-        if metric == 'r2' and len(all_valid_values) > 0:
-            y_min = max(0.9, np.min(all_valid_values) - 0.005)
-            y_max = min(1.0, np.max(all_valid_values) + 0.005)
-            if y_max - y_min < 0.002:
-                y_min -= 0.001
-                y_max += 0.001
-            ax.set_ylim(y_min, y_max)
-        else:
-            if metrics_config[metric]['ylim']:
-                ax.set_ylim(metrics_config[metric]['ylim'])
 
-        # Subplot label (centered at the bottom)
+        if all_valid_values:
+            ax.set_ylim(*_adaptive_ylim(all_valid_values, metric))
+            _draw_end_labels(ax, endpoints, style_dict, x_label)
+
         ax.text(0.5, -0.18, labels[idx], transform=ax.transAxes,
                 ha='center', va='top', fontsize=10)
 
-    # Save as PNG format (original)
     png_filename = 'metrics_plot_sci_style.png'
     png_save_path = os.path.join(out_path, png_filename)
     plt.savefig(png_save_path, dpi=500, bbox_inches='tight', facecolor='white')
-    
-    # Added: Save as PDF format
+
     pdf_filename = 'metrics_plot_sci_style.pdf'
     pdf_save_path = os.path.join(out_path, pdf_filename)
     plt.savefig(pdf_save_path, bbox_inches='tight', facecolor='white', format='pdf')
-    
+
     plt.close()
-    print(f"SCI-style metric plot saved:")
+    print("SCI-style metric plot saved:")
     print(f"  - PNG: {png_filename}")
     print(f"  - PDF: {pdf_filename}")
 
+
 def plot_boxplot_metrics(final_scores_results, out_path="."):
-    """
-    Plot boxplots of 4 metrics (RMSE/MAE/MAPE/R²) to compare 5 activation functions
-    Input: final_scores_results — complete metric list of each activation function on 4 batteries
-    Output: 2×2 subplot boxplots (saved as PNG/PDF)
-    """
-    # Metric configuration (consistent with original plot_metrics_vs_ratio)
+    """Plot boxplots of metrics to compare activation functions."""
     metrics_config = {
-        'rmse': {'name': 'RMSE', 'ylabel': 'RMSE (Ah)', 'ylim': (0.024, 0.032)},
-        'mae':  {'name': 'MAE',  'ylabel': 'MAE (Ah)',  'ylim': (0.016, 0.024)},
-        'mape': {'name': 'MAPE', 'ylabel': 'MAPE (%)',   'ylim': (1.1, 1.55)},
-        'r2':   {'name': '$R^2$','ylabel': '$R^2$',      'ylim': None}
+        'rmse': {'name': 'RMSE', 'ylabel': 'RMSE (Ah)'},
+        'mae':  {'name': 'MAE',  'ylabel': 'MAE (Ah)'},
+        'mape': {'name': 'MAPE', 'ylabel': 'MAPE (%)'},
+        'r2':   {'name': '$R^2$', 'ylabel': '$R^2$'}
     }
     metrics_order = ['rmse', 'mae', 'mape', 'r2']
-    labels = ['(a)', '(b)', '(c)', '(d)']  # Subplot labels
+    labels = ['(a)', '(b)', '(c)', '(d)']
     activation_list = ['cauchy', 'tanh', 'relu', 'gelu', 'leaky_relu']
 
-    # SCI color scheme (exactly the same as original code)
     style_dict = {
         'cauchy':      {'color': '#e66d50', 'label': 'Cauchy'},
         'tanh':        {'color': '#e7c66b', 'label': 'Tanh'},
@@ -161,28 +194,13 @@ def plot_boxplot_metrics(final_scores_results, out_path="."):
         'leaky_relu':  {'color': '#8ab07c', 'label': 'Leaky ReLU'}
     }
 
-    # Create 2×2 subplots
     fig, axes = plt.subplots(2, 2, figsize=(12, 8), dpi=500)
     axes = axes.flatten()
-
-    # Adjust subplot spacing
     plt.subplots_adjust(left=0.08, right=0.95, bottom=0.10, top=0.94, wspace=0.2, hspace=0.22)
 
-    # Plot boxplot for each metric
     for idx, (ax, metric) in enumerate(zip(axes, metrics_order)):
-        # Collect complete metric data of each activation function on 4 batteries (not mean, but real values of each battery)
-        box_data = []
-        for act in activation_list:
-            # Extract all battery metrics of the activation function under all training ratios from final_scores_results
-            all_values = []
-            for ratio_values in final_scores_results[act][metric]:
-                if metric == 'mape':
-                    all_values.append(ratio_values)  # MAPE is percentage
-                else:
-                    all_values.append(ratio_values)
-            box_data.append(all_values)
+        box_data = [final_scores_results[act][metric] for act in activation_list]
 
-        # Plot boxplot
         bp = ax.boxplot(
             box_data,
             patch_artist=True,
@@ -191,40 +209,21 @@ def plot_boxplot_metrics(final_scores_results, out_path="."):
             medianprops=dict(color='black', linewidth=1.5),
             whiskerprops=dict(linewidth=1.0),
             capprops=dict(linewidth=1.0),
-            flierprops=dict(marker='o', markersize=4, markerfacecolor='red', markeredgecolor='white')
+            flierprops=dict(marker='o', markersize=4, markerfacecolor='red', markeredgecolor='white'),
         )
 
-        # Color the boxes (consistent with original code color scheme)
         for patch, act in zip(bp['boxes'], activation_list):
             patch.set_facecolor(style_dict[act]['color'])
             patch.set_alpha(0.7)
 
-        # Subplot style
+        all_values = np.concatenate([np.asarray(values, dtype=float) for values in box_data])
+        ax.set_ylim(*_adaptive_ylim(all_values, metric))
         ax.set_ylabel(metrics_config[metric]['ylabel'], fontsize=7, labelpad=6)
         # ax.grid(True, linestyle='--', alpha=0.6, color='#cccccc', linewidth=0.7, zorder=1)
         ax.tick_params(axis='both', labelsize=7, width=0.8, length=3)
-
-        # Y-axis range (R² adaptive)
-        if metric == 'r2':
-            all_r2_values = []
-            for act in activation_list:
-                all_r2_values.extend(final_scores_results[act]['r2'])
-            if all_r2_values:
-                y_min = max(0.9, np.min(all_r2_values) - 0.005)
-                y_max = min(1.0, np.max(all_r2_values) + 0.005)
-                if y_max - y_min < 0.002:
-                    y_min -= 0.001
-                    y_max += 0.001
-                ax.set_ylim(y_min, y_max)
-        else:
-            if metrics_config[metric]['ylim']:
-                ax.set_ylim(metrics_config[metric]['ylim'])
-
-        # Subplot label (centered at the bottom, consistent with original code)
         ax.text(0.5, -0.1, labels[idx], transform=ax.transAxes,
                 ha='center', va='top', fontsize=10, fontweight='normal')
 
-    # Save as PNG and PDF (consistent with original plot_metrics_vs_ratio)
     png_filename = 'metrics_boxplot_sci_style.png'
     png_save_path = os.path.join(out_path, png_filename)
     plt.savefig(png_save_path, dpi=500, bbox_inches='tight', facecolor='white')
@@ -234,6 +233,6 @@ def plot_boxplot_metrics(final_scores_results, out_path="."):
     plt.savefig(pdf_save_path, bbox_inches='tight', facecolor='white', format='pdf')
 
     plt.close()
-    print(f"\nSCI-style boxplot saved:")
+    print("\nSCI-style boxplot saved:")
     print(f"  - PNG: {png_filename}")
     print(f"  - PDF: {pdf_filename}")

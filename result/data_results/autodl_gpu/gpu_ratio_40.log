@@ -1,0 +1,263 @@
+Loading cached data from /root/autodl-tmp/battery-rul-xnet/data/raw/NASA_Battery_Data.npy
+
+=== Multi-model comparison with 40% training data ===
+
+--- XNet combo 1: lr=0.006, hidden_dim=96, layers=2, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.2206
+
+--- XNet combo 2: lr=0.006, hidden_dim=96, layers=2, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.2132
+
+--- XNet combo 3: lr=0.006, hidden_dim=96, layers=2, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1712
+
+--- XNet combo 4: lr=0.006, hidden_dim=96, layers=3, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1485
+
+--- XNet combo 5: lr=0.006, hidden_dim=96, layers=3, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1835
+
+--- XNet combo 6: lr=0.006, hidden_dim=96, layers=3, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1889
+
+--- XNet combo 7: lr=0.006, hidden_dim=96, layers=4, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.2000
+
+--- XNet combo 8: lr=0.006, hidden_dim=96, layers=4, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1619
+
+--- XNet combo 9: lr=0.006, hidden_dim=96, layers=4, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1454
+
+--- XNet combo 10: lr=0.006, hidden_dim=128, layers=2, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.2586
+
+--- XNet combo 11: lr=0.006, hidden_dim=128, layers=2, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1951
+
+--- XNet combo 12: lr=0.006, hidden_dim=128, layers=2, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.2023
+
+--- XNet combo 13: lr=0.006, hidden_dim=128, layers=3, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1840
+
+--- XNet combo 14: lr=0.006, hidden_dim=128, layers=3, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1603
+
+--- XNet combo 15: lr=0.006, hidden_dim=128, layers=3, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1480
+
+--- XNet combo 16: lr=0.006, hidden_dim=128, layers=4, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.2262
+
+--- XNet combo 17: lr=0.006, hidden_dim=128, layers=4, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1770
+
+--- XNet combo 18: lr=0.006, hidden_dim=128, layers=4, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1650
+
+--- XNet combo 19: lr=0.006, hidden_dim=160, layers=2, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1576
+
+--- XNet combo 20: lr=0.006, hidden_dim=160, layers=2, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1602
+
+--- XNet combo 21: lr=0.006, hidden_dim=160, layers=2, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1457
+
+--- XNet combo 22: lr=0.006, hidden_dim=160, layers=3, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1523
+
+--- XNet combo 23: lr=0.006, hidden_dim=160, layers=3, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1922
+
+--- XNet combo 24: lr=0.006, hidden_dim=160, layers=3, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1650
+
+--- XNet combo 25: lr=0.006, hidden_dim=160, layers=4, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1467
+
+--- XNet combo 26: lr=0.006, hidden_dim=160, layers=4, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1798
+
+--- XNet combo 27: lr=0.006, hidden_dim=160, layers=4, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1925
+
+--- XNet combo 28: lr=0.008, hidden_dim=96, layers=2, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1944
+
+--- XNet combo 29: lr=0.008, hidden_dim=96, layers=2, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1668
+
+--- XNet combo 30: lr=0.008, hidden_dim=96, layers=2, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1680
+
+--- XNet combo 31: lr=0.008, hidden_dim=96, layers=3, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1347
+
+--- XNet combo 32: lr=0.008, hidden_dim=96, layers=3, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1616
+
+--- XNet combo 33: lr=0.008, hidden_dim=96, layers=3, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1483
+
+--- XNet combo 34: lr=0.008, hidden_dim=96, layers=4, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1879
+
+--- XNet combo 35: lr=0.008, hidden_dim=96, layers=4, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1795
+
+--- XNet combo 36: lr=0.008, hidden_dim=96, layers=4, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1768
+
+--- XNet combo 37: lr=0.008, hidden_dim=128, layers=2, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1838
+
+--- XNet combo 38: lr=0.008, hidden_dim=128, layers=2, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1689
+
+--- XNet combo 39: lr=0.008, hidden_dim=128, layers=2, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1618
+
+--- XNet combo 40: lr=0.008, hidden_dim=128, layers=3, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1964
+
+--- XNet combo 41: lr=0.008, hidden_dim=128, layers=3, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1777
+
+--- XNet combo 42: lr=0.008, hidden_dim=128, layers=3, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1682
+
+--- XNet combo 43: lr=0.008, hidden_dim=128, layers=4, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1770
+
+--- XNet combo 44: lr=0.008, hidden_dim=128, layers=4, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1620
+
+--- XNet combo 45: lr=0.008, hidden_dim=128, layers=4, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1708
+
+--- XNet combo 46: lr=0.008, hidden_dim=160, layers=2, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1545
+
+--- XNet combo 47: lr=0.008, hidden_dim=160, layers=2, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1508
+
+--- XNet combo 48: lr=0.008, hidden_dim=160, layers=2, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1361
+
+--- XNet combo 49: lr=0.008, hidden_dim=160, layers=3, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1806
+
+--- XNet combo 50: lr=0.008, hidden_dim=160, layers=3, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1717
+
+--- XNet combo 51: lr=0.008, hidden_dim=160, layers=3, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1670
+
+--- XNet combo 52: lr=0.008, hidden_dim=160, layers=4, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1694
+
+--- XNet combo 53: lr=0.008, hidden_dim=160, layers=4, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1546
+
+--- XNet combo 54: lr=0.008, hidden_dim=160, layers=4, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1335
+
+--- XNet combo 55: lr=0.01, hidden_dim=96, layers=2, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1889
+
+--- XNet combo 56: lr=0.01, hidden_dim=96, layers=2, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1708
+
+--- XNet combo 57: lr=0.01, hidden_dim=96, layers=2, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1734
+
+--- XNet combo 58: lr=0.01, hidden_dim=96, layers=3, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1872
+
+--- XNet combo 59: lr=0.01, hidden_dim=96, layers=3, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1858
+
+--- XNet combo 60: lr=0.01, hidden_dim=96, layers=3, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1614
+
+--- XNet combo 61: lr=0.01, hidden_dim=96, layers=4, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1796
+
+--- XNet combo 62: lr=0.01, hidden_dim=96, layers=4, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1737
+
+--- XNet combo 63: lr=0.01, hidden_dim=96, layers=4, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1899
+
+--- XNet combo 64: lr=0.01, hidden_dim=128, layers=2, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1266
+
+--- XNet combo 65: lr=0.01, hidden_dim=128, layers=2, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1510
+
+--- XNet combo 66: lr=0.01, hidden_dim=128, layers=2, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1655
+
+--- XNet combo 67: lr=0.01, hidden_dim=128, layers=3, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1506
+
+--- XNet combo 68: lr=0.01, hidden_dim=128, layers=3, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1738
+
+--- XNet combo 69: lr=0.01, hidden_dim=128, layers=3, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1579
+
+--- XNet combo 70: lr=0.01, hidden_dim=128, layers=4, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1473
+
+--- XNet combo 71: lr=0.01, hidden_dim=128, layers=4, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1639
+
+--- XNet combo 72: lr=0.01, hidden_dim=128, layers=4, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1646
+
+--- XNet combo 73: lr=0.01, hidden_dim=160, layers=2, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1509
+
+--- XNet combo 74: lr=0.01, hidden_dim=160, layers=2, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1293
+
+--- XNet combo 75: lr=0.01, hidden_dim=160, layers=2, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1304
+
+--- XNet combo 76: lr=0.01, hidden_dim=160, layers=3, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1689
+
+--- XNet combo 77: lr=0.01, hidden_dim=160, layers=3, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1502
+
+--- XNet combo 78: lr=0.01, hidden_dim=160, layers=3, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1457
+
+--- XNet combo 79: lr=0.01, hidden_dim=160, layers=4, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1519
+
+--- XNet combo 80: lr=0.01, hidden_dim=160, layers=4, cauchy={'lambda1': 0.85, 'lambda2': 0.15, 'd': 0.65} ---
+    Avg RMSE: 0.1442
+
+--- XNet combo 81: lr=0.01, hidden_dim=160, layers=4, cauchy={'lambda1': 1.0, 'lambda2': 0.2, 'd': 0.75} ---
+    Avg RMSE: 0.1673
+
+--- Training FC baseline ---
+    Avg RMSE: 0.4646
+
+--- Training LSTM baseline ---
+    Avg RMSE: 0.0768
+
+--- Training GRU baseline ---
+    Avg RMSE: 0.0836
+
+--- Training CNN baseline ---
+    Avg RMSE: 0.2721
+
+--- Training ResNet baseline ---
+    Avg RMSE: 0.1970
+train_ratio  epochs  XNet_rmse  FC_rmse  LSTM_rmse  GRU_rmse  CNN_rmse  ResNet_rmse best_baseline_model  best_baseline_rmse  xnet_vs_best_baseline_percent  xnet_best_lr  xnet_best_hidden_dim  xnet_best_num_layers  xnet_best_lambda1  xnet_best_lambda2  xnet_best_d
+        40%     300   0.126566 0.464554    0.07683   0.08361  0.272138     0.197048                LSTM             0.07683                     -64.735308          0.01                   128                     2                0.7                0.1          0.5

@@ -1,0 +1,2 @@
+train_ratio,epochs,XNet_rmse,FC_rmse,LSTM_rmse,GRU_rmse,CNN_rmse,ResNet_rmse,best_baseline_model,best_baseline_rmse,xnet_vs_best_baseline_percent,xnet_best_lr,xnet_best_hidden_dim,xnet_best_num_layers,xnet_best_lambda1,xnet_best_lambda2,xnet_best_d
+70%,300,0.036617385337216465,0.03557782422191254,0.0329271675021505,0.024375292763230243,0.03475135842741105,0.04199508365675358,GRU,0.024375292763230243,-50.22336631153507,0.01,160,2,0.7,0.1,0.5

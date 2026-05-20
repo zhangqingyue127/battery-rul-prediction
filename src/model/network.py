@@ -3,7 +3,15 @@ import torch.nn as nn
 from src.model.activation import CauchyActivation, StandardActivation
 
 class XNet(nn.Module):
-    def __init__(self, feature_size, hidden_dim=64, num_layers=2, activation='cauchy', cauchy_params=None):
+    def __init__(
+        self,
+        feature_size,
+        hidden_dim=64,
+        num_layers=2,
+        activation='cauchy',
+        cauchy_params=None,
+        use_layer_norm=False,
+    ):
         super().__init__()
         # Build layers
         layers = [nn.Linear(feature_size, hidden_dim)]
@@ -11,6 +19,10 @@ class XNet(nn.Module):
             layers.append(nn.Linear(hidden_dim, hidden_dim))
         self.layers = nn.ModuleList(layers)
         self.out = nn.Linear(hidden_dim, 1)
+        self.use_layer_norm = activation == 'cauchy' and use_layer_norm
+        self.layer_norms = nn.ModuleList(
+            [nn.LayerNorm(hidden_dim) for _ in range(num_layers)]
+        ) if self.use_layer_norm else None
 
         # Activation function
         if activation == 'cauchy':
@@ -29,8 +41,10 @@ class XNet(nn.Module):
 
     def forward(self, x):
         x = x.squeeze(-1)
-        for lin in self.layers:
+        for idx, lin in enumerate(self.layers):
             x = lin(x)
+            if self.layer_norms is not None:
+                x = self.layer_norms[idx](x)
             x = self.act(x)
         x = self.out(x)
         return x

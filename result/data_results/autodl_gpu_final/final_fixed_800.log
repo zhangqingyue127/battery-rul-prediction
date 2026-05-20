@@ -1,0 +1,103 @@
+Loading cached data from /root/autodl-tmp/battery-rul-xnet/data/raw/NASA_Battery_Data.npy
+
+=== Multi-model comparison with 40% training data ===
+
+--- XNet combo 1: lr=0.01, hidden_dim=128, layers=2, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.1015
+
+--- Training FC baseline ---
+    Avg RMSE: 0.2226
+
+--- Training LSTM baseline ---
+    Avg RMSE: 0.0597
+
+--- Training GRU baseline ---
+    Avg RMSE: 0.0434
+
+--- Training CNN baseline ---
+    Avg RMSE: 0.1674
+
+--- Training ResNet baseline ---
+    Avg RMSE: 0.1808
+
+=== Multi-model comparison with 50% training data ===
+
+--- XNet combo 1: lr=0.01, hidden_dim=128, layers=2, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.0206
+
+--- Training FC baseline ---
+    Avg RMSE: 0.0452
+
+--- Training LSTM baseline ---
+    Avg RMSE: 0.0346
+
+--- Training GRU baseline ---
+    Avg RMSE: 0.0264
+
+--- Training CNN baseline ---
+    Avg RMSE: 0.0301
+
+--- Training ResNet baseline ---
+    Avg RMSE: 0.1021
+
+=== Multi-model comparison with 60% training data ===
+
+--- XNet combo 1: lr=0.01, hidden_dim=128, layers=2, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.0190
+
+--- Training FC baseline ---
+    Avg RMSE: 0.0277
+
+--- Training LSTM baseline ---
+    Avg RMSE: 0.0349
+
+--- Training GRU baseline ---
+    Avg RMSE: 0.0232
+
+--- Training CNN baseline ---
+    Avg RMSE: 0.0283
+
+--- Training ResNet baseline ---
+    Avg RMSE: 0.0539
+
+=== Multi-model comparison with 70% training data ===
+
+--- XNet combo 1: lr=0.01, hidden_dim=128, layers=2, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5} ---
+    Avg RMSE: 0.0198
+
+--- Training FC baseline ---
+    Avg RMSE: 0.0241
+
+--- Training LSTM baseline ---
+    Avg RMSE: 0.0303
+
+--- Training GRU baseline ---
+    Avg RMSE: 0.0218
+
+--- Training CNN baseline ---
+    Avg RMSE: 0.0276
+
+--- Training ResNet baseline ---
+    Avg RMSE: 0.0289
+Model comparison JSON saved: /root/autodl-tmp/battery-rul-xnet/result/data_results/model_comparison_results.json
+Model comparison CSV saved: /root/autodl-tmp/battery-rul-xnet/result/data_results/model_comparison_rmse.csv
+XNet parameter search CSV saved: /root/autodl-tmp/battery-rul-xnet/result/data_results/xnet_param_search.csv
+Model comparison summary saved: /root/autodl-tmp/battery-rul-xnet/result/data_results/model_comparison_summary.csv
+Model metrics plot saved:
+  - PNG: model_metrics_sci_style.png
+  - PDF: model_metrics_sci_style.pdf
+Model prediction plot saved:
+  - PNG: model_prediction_sci_style.png
+  - PDF: model_prediction_sci_style.pdf
+
+Model Comparison Summary
+====================================================================================================
+Best XNet params: lr=0.01, hidden_dim=128, num_layers=2, cauchy={'lambda1': 0.7, 'lambda2': 0.1, 'd': 0.5}
+Battery     XNet        FC          LSTM        GRU         CNN         ResNet      
+------------------------------------------------------------------------------------
+B0005       0.0527      0.0349      0.0430      0.0864      0.2224      0.2299      
+B0006       0.1474      0.1986      0.1070      0.0305      0.0403      0.0748      
+B0007       0.0451      0.1519      0.0282      0.0254      0.1585      0.1735      
+B0018       0.1609      0.5050      0.0608      0.0314      0.2484      0.2448      
+------------------------------------------------------------------------------------
+Average     0.1015      0.2226      0.0597      0.0434      0.1674      0.1808      

@@ -6,10 +6,27 @@ from src.data.preprocess import get_train_test
 from src.training.metrics import evaluation_rmse, evaluation_mape, evaluation_mae, evaluation_r2
 from src.data.loader import setup_seed  # Note: setup_seed is moved to loader.py
 
+def _snapshot_cauchy_params(model, battery_name, epoch):
+    """Record trainable CAF parameters for convergence diagnostics."""
+    if not hasattr(model, 'act'):
+        return None
+    act = model.act
+    required = ['lambda1', 'lambda2', 'd']
+    if not all(hasattr(act, name) for name in required):
+        return None
+    return {
+        'battery': battery_name,
+        'epoch': int(epoch),
+        'lambda1': float(act.lambda1.detach().cpu().item()),
+        'lambda2': float(act.lambda2.detach().cpu().item()),
+        'd': float(act.d.detach().cpu().item()),
+    }
+
 def train_with_logs(params):
     """Train model and return evaluation scores + predictions"""
     setup_seed(params['seed'])
     scores_list, result_list, cycle_list = [], [], []
+    cauchy_param_history = []
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     for name in params['battery_list']:
@@ -21,7 +38,8 @@ def train_with_logs(params):
         # Initialize model
         model = XNet(
             params['feature_size'], params['hidden_dim'], params['num_layers'],
-            params['activation'], params.get('cauchy_params')
+            params['activation'], params.get('cauchy_params'),
+            params.get('use_layer_norm', True)
         ).to(device)
         
         optimizer = torch.optim.Adam(model.parameters(), lr=params['lr'], weight_decay=params['weight_decay'])
@@ -54,6 +72,9 @@ def train_with_logs(params):
                     pred = model(x_val_t).cpu().numpy().reshape(-1) * params['rated_capacity']
 
                 current_rmse = evaluation_rmse(test_y, pred)
+                cauchy_snapshot = _snapshot_cauchy_params(model, name, epoch + 1)
+                if cauchy_snapshot is not None:
+                    cauchy_param_history.append(cauchy_snapshot)
                 if current_rmse < best_rmse:
                     best_rmse = current_rmse
                     best_pred = pred.copy()
@@ -77,13 +98,14 @@ def train_with_logs(params):
         result_list.append(full_pred)
         cycle_list.append(cycle_seq)
 
-    return scores_list, result_list, cycle_list
+    return scores_list, result_list, cycle_list, cauchy_param_history
 
 def run_experiments(battery_data, train_ratios, activation_functions, model_params):
     """Run experiments for all activation functions and train ratios"""
     final_results = {act: {'rmse': [], 'mape': [], 'mae': [], 'r2': []} for act in activation_functions}
     pred_results = {name: {ratio: {} for ratio in train_ratios} for name in battery_data.keys()}
     cycle_results = {name: {} for name in battery_data.keys()}
+    cauchy_param_histories = {}
 
     for ratio in train_ratios:
         print(f"\n--- Training with {int(ratio*100)}% data ---")
@@ -97,7 +119,7 @@ def run_experiments(battery_data, train_ratios, activation_functions, model_para
             current_params['battery_list'] = list(battery_data.keys())
             
             # Train model
-            scores_list, result_list, cycle_list = train_with_logs(current_params)
+            scores_list, result_list, cycle_list, cauchy_param_history = train_with_logs(current_params)
             
             # Calculate average metrics
             avg_rmse = np.mean([s['rmse'] for s in scores_list])
@@ -115,8 +137,10 @@ def run_experiments(battery_data, train_ratios, activation_functions, model_para
             for i, name in enumerate(battery_data.keys()):
                 pred_results[name][ratio][act] = result_list[i]
                 cycle_results[name] = cycle_list[i]
+            if act == 'cauchy':
+                cauchy_param_histories[ratio] = cauchy_param_history
             
             # Print metrics
             print(f"    - Avg RMSE: {avg_rmse:.4f}, Avg MAE: {avg_mae:.4f}, Avg MAPE: {avg_mape:.4f}%, Avg R2: {avg_r2:.4f}")
 
-    return final_results, pred_results, cycle_results
+    return final_results, pred_results, cycle_results, cauchy_param_histories

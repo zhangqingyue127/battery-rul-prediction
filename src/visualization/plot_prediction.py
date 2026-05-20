@@ -1,8 +1,10 @@
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+
 plt.rcParams['font.family'] = 'Times New Roman'
 plt.rcParams['axes.linewidth'] = 0.5
+
 def visualize_battery_combined(cycle_seq, true_data, pred_dict_all_ratios, battery_name, out_path="."):
     """
     Visualize capacity prediction results for a single battery across different training ratios
@@ -29,14 +31,12 @@ def visualize_battery_combined(cycle_seq, true_data, pred_dict_all_ratios, batte
         if split_idx >= len(cycle_seq):
             split_idx = len(cycle_seq) - 1
 
-        # Stretch the remaining horizon to fill the whole subplot.
-        # For 40%/50%/60%/70% training ratios, this displays only the
-        # remaining 60%/50%/40%/30% segment over the full x-axis range.
+        # Display only the post-split prediction horizon, following the
+        # reference plotting format from F:\python_code\battery-rul-prediction.
         x_min = min(cycle_seq)
         x_max = max(cycle_seq)
         plotted_values = []
 
-        # Plot the true remaining capacity segment as the bold black reference curve.
         true_segment = true_data[split_idx:]
         true_cycles = np.linspace(x_min, x_max, len(true_segment))
         ax.plot(true_cycles, true_segment, 'k-', linewidth=1.5,
@@ -68,7 +68,7 @@ def visualize_battery_combined(cycle_seq, true_data, pred_dict_all_ratios, batte
                         color=style['color'], linestyle=style['linestyle'],
                         linewidth=style['linewidth'], label=style['label'], 
                         zorder=1)   # Background layer
-                
+        
         # Adaptive axis limits
         x_margin = (x_max - x_min) * 0.05
         ax.set_xlim(x_min - x_margin, x_max + x_margin)

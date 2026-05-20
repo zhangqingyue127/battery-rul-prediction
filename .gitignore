@@ -1,11 +1,16 @@
-﻿# 屏蔽运行生成的result文件夹（后续运行代码会生成，不上传）
-result/
+﻿# Keep generated result/ artifacts in release commits; ignore only the compressed duplicate.
+result.zip
 
 # 屏蔽训练日志
 training_log.txt
 
 # 屏蔽数据缓存文件
 data/raw/*.npy
+data/raw/CALCE/
+data/raw/**/*.npy
+data/raw/**/*.zip
+data/raw/**/*.xlsx
+src/data/raw/
 
 # 屏蔽IDE配置
 .idea/
