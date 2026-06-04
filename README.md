@@ -37,7 +37,7 @@ where:
 ## Pipeline Overview
 The end-to-end workflow of our battery RUL prediction framework is illustrated below, covering data preparation, model training, validation, and evaluation:
 
-![Battery RUL Prediction Pipeline](result/figure/pipeline_overview.png)
+![Battery RUL Prediction Pipeline](pipeline_overview.png)
 
 ### Pipeline Components
 1. **Data Initialization & Preprocessing**  
