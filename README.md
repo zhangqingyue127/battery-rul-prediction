@@ -211,7 +211,6 @@ summaries, per-battery metrics, and convergence histories to
 `noise_training_ablation_*.csv/json`, with convergence and RMSE comparison
 plots in `result/figure/`.
 
-
 ## Code Structure
 ```
 battery-rul-prediction/
@@ -239,6 +238,15 @@ battery-rul-prediction/
     ├── figure/              # Visualization plots (PNG/PDF)
     └── data_results/        # Metric data (CSV/JSON)
 ```
+
+## Authors
+| Name | Role | GitHub Profile |
+|---|---|---|
+| Qu Jinyan | Team Coordinator, XNet Architecture Design & Analysis | [@jinyan1qv-ui](https://github.com/jinyan1qv-ui) |
+| Zhang Qingyue | Algorithm Implementation, Model Construction & Debugging (Core Code) | [@zhangqingyue127](https://github.com/zhangqingyue127) |
+| Xu Xiaoying | Cauchy Activation Function Interpretation & Analysis & Paper Writing | [@xu101520](https://github.com/xu101520) |
+| Li Xingyu | Evaluation Metrics Design & Paper Writing (Associate Programming) | [@Twinkle0214](https://github.com/Twinkle0214) |
+| Zou Yalan | Data Collection & Preprocessing & Paper Writing (Associate Programming) | [@Foodie585](https://github.com/Foodie585) |
 
 ## Citation
 If you use this code or the proposed Cauchy activation function in your research, please cite:
