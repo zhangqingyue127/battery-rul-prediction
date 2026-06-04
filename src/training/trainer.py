@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 from src.model.network import XNet
 from src.data.preprocess import get_train_test
-from src.training.metrics import evaluation_rmse, evaluation_mape, evaluation_mae, evaluation_r2
+from src.training.metrics import evaluation_rmse, evaluation_mape, evaluation_mae
 from src.data.loader import setup_seed  # Note: setup_seed is moved to loader.py
 
 def _snapshot_cauchy_params(model, battery_name, epoch):
@@ -82,8 +82,7 @@ def train_with_logs(params):
         # Calculate metrics
         best_mape = evaluation_mape(test_y, best_pred)
         best_mae = evaluation_mae(test_y, best_pred)
-        best_r2 = evaluation_r2(test_y, best_pred)
-        scores_list.append({'rmse': best_rmse, 'mape': best_mape, 'mae': best_mae, 'r2': best_r2})
+        scores_list.append({'rmse': best_rmse, 'mape': best_mape, 'mae': best_mae})
         
         # Generate full prediction sequence
         full_pred = [np.nan] * len(data_seq)
@@ -102,7 +101,7 @@ def train_with_logs(params):
 
 def run_experiments(battery_data, train_ratios, activation_functions, model_params):
     """Run experiments for all activation functions and train ratios"""
-    final_results = {act: {'rmse': [], 'mape': [], 'mae': [], 'r2': []} for act in activation_functions}
+    final_results = {act: {'rmse': [], 'mape': [], 'mae': []} for act in activation_functions}
     pred_results = {name: {ratio: {} for ratio in train_ratios} for name in battery_data.keys()}
     cycle_results = {name: {} for name in battery_data.keys()}
     cauchy_param_histories = {}
@@ -125,13 +124,11 @@ def run_experiments(battery_data, train_ratios, activation_functions, model_para
             avg_rmse = np.mean([s['rmse'] for s in scores_list])
             avg_mape = np.mean([s['mape'] for s in scores_list])
             avg_mae = np.mean([s['mae'] for s in scores_list])
-            avg_r2 = np.mean([s['r2'] for s in scores_list])
             
             # Save results
             final_results[act]['rmse'].append(avg_rmse)
             final_results[act]['mape'].append(avg_mape)
             final_results[act]['mae'].append(avg_mae)
-            final_results[act]['r2'].append(avg_r2)
             
             # Save predictions
             for i, name in enumerate(battery_data.keys()):
@@ -141,6 +138,6 @@ def run_experiments(battery_data, train_ratios, activation_functions, model_para
                 cauchy_param_histories[ratio] = cauchy_param_history
             
             # Print metrics
-            print(f"    - Avg RMSE: {avg_rmse:.4f}, Avg MAE: {avg_mae:.4f}, Avg MAPE: {avg_mape:.4f}%, Avg R2: {avg_r2:.4f}")
+            print(f"    - Avg RMSE: {avg_rmse:.4f}, Avg MAE: {avg_mae:.4f}, Avg MAPE: {avg_mape:.4f}%")
 
     return final_results, pred_results, cycle_results, cauchy_param_histories

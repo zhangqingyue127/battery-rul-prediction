@@ -203,7 +203,14 @@ def plot_model_metric_histories(histories, out_dir):
     print("  - PDF: model_metrics_sci_style.pdf")
 
 
-def plot_model_predictions(battery_data, predictions, out_dir, rated_capacity=2.0):
+def plot_model_predictions(
+    battery_data,
+    predictions,
+    out_dir,
+    rated_capacity=2.0,
+    y_label="Capacity (Ah)",
+    true_label="True Capacity",
+):
     """Plot four-battery prediction comparison in the project SCI style."""
     os.makedirs(out_dir, exist_ok=True)
     battery_list = list(battery_data.keys())
@@ -224,7 +231,7 @@ def plot_model_predictions(battery_data, predictions, out_dir, rated_capacity=2.
             true_data,
             "k-",
             linewidth=1.5,
-            label="True Capacity",
+            label=true_label,
             zorder=20,
         )
 
@@ -247,7 +254,7 @@ def plot_model_predictions(battery_data, predictions, out_dir, rated_capacity=2.
         y_max = max(true_data) * 1.05
         ax.set_ylim(y_min, y_max)
         ax.set_xlabel("Cycle Number (Real)", fontsize=7, labelpad=6)
-        ax.set_ylabel("Capacity (Ah)", fontsize=7, labelpad=6)
+        ax.set_ylabel(y_label, fontsize=7, labelpad=6)
         ax.grid(False)
         ax.tick_params(axis="both", labelsize=8, width=0.8, length=3)
         ax.text(
@@ -286,6 +293,8 @@ def plot_model_predictions_by_battery_ratios(
     battery_data,
     ratio_results,
     out_dir,
+    y_label="Capacity (Ah)",
+    true_label="True Capacity",
 ):
     """Plot one four-ratio multi-model prediction figure for each battery."""
     os.makedirs(out_dir, exist_ok=True)
@@ -326,7 +335,7 @@ def plot_model_predictions_by_battery_ratios(
                 true_segment,
                 "k-",
                 linewidth=1.5,
-                label="True Capacity",
+                label=true_label,
                 zorder=20,
             )
 
@@ -360,7 +369,7 @@ def plot_model_predictions_by_battery_ratios(
             y_max = max(plotted_values) * 1.05
             ax.set_ylim(y_min, y_max)
             ax.set_xlabel("Cycle Number", fontsize=7, labelpad=6)
-            ax.set_ylabel("Capacity (Ah)", fontsize=7, labelpad=6)
+            ax.set_ylabel(y_label, fontsize=7, labelpad=6)
             ax.grid(False)
             ax.tick_params(axis="both", labelsize=8, width=0.8, length=3)
             ax.text(

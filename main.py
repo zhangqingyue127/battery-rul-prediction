@@ -82,7 +82,6 @@ def save_experiment_results(final_results, save_dir):
                 "rmse": float(final_results[act]["rmse"][i]),
                 "mae": float(final_results[act]["mae"][i]),
                 "mape": float(final_results[act]["mape"][i]),
-                "r2": float(final_results[act]["r2"][i])
             }
             csv_data.append(row)
     
@@ -316,7 +315,7 @@ def main():
     # 7. Print experiment results summary
     print("\nExperiment Results Summary")
     print("=" * 80)
-    for metric in ["rmse", "mae", "mape", "r2"]:
+    for metric in ["rmse", "mae", "mape"]:
         print(f"\n--- {metric.upper()} Metrics ---")
         header = f"{'Activation':<12}" + "".join([f"{int(r*100)}%".center(15) for r in CONFIG["train_ratios"]])
         print(header)

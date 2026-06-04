@@ -5,7 +5,15 @@ import matplotlib.pyplot as plt
 plt.rcParams['font.family'] = 'Times New Roman'
 plt.rcParams['axes.linewidth'] = 0.5
 
-def visualize_battery_combined(cycle_seq, true_data, pred_dict_all_ratios, battery_name, out_path="."):
+def visualize_battery_combined(
+    cycle_seq,
+    true_data,
+    pred_dict_all_ratios,
+    battery_name,
+    out_path=".",
+    y_label="Capacity (Ah)",
+    true_label="True Capacity",
+):
     """
     Visualize capacity prediction results for a single battery across different training ratios
     Creates a 2×2 subplot layout (40%/50%/60%/70% training ratios)
@@ -40,7 +48,7 @@ def visualize_battery_combined(cycle_seq, true_data, pred_dict_all_ratios, batte
         true_segment = true_data[split_idx:]
         true_cycles = np.linspace(x_min, x_max, len(true_segment))
         ax.plot(true_cycles, true_segment, 'k-', linewidth=1.5,
-                label='True Capacity', zorder=20)
+                label=true_label, zorder=20)
         plotted_values.extend(true_segment)
         
         # Plot predicted values for each activation function
@@ -80,7 +88,7 @@ def visualize_battery_combined(cycle_seq, true_data, pred_dict_all_ratios, batte
         
         # Subplot title (only show training ratio)
         ax.set_xlabel('Cycle Number', fontsize=7, labelpad=6)
-        ax.set_ylabel('Capacity (Ah)', fontsize=7, labelpad=6)
+        ax.set_ylabel(y_label, fontsize=7, labelpad=6)
         
         # Grid and tick style
         # ax.grid(True, linestyle='--', alpha=0.6, color='#cccccc', linewidth=0.7)
@@ -115,7 +123,14 @@ def visualize_battery_combined(cycle_seq, true_data, pred_dict_all_ratios, batte
     print(f"  - Saved PNG: {png_filename}")
     print(f"  - Saved PDF: {pdf_filename}")
 
-def visualize_all_batteries(pred_results, cycle_results, battery_data, out_path="."):
+def visualize_all_batteries(
+    pred_results,
+    cycle_results,
+    battery_data,
+    out_path=".",
+    y_label="Capacity (Ah)",
+    true_label="True Capacity",
+):
     """
     Generate prediction plots for all batteries in the dataset
     Iterates through each battery and calls visualize_battery_combined
@@ -126,4 +141,12 @@ def visualize_all_batteries(pred_results, cycle_results, battery_data, out_path=
         cycle_seq = cycle_results[name]
         true_data = battery_data[name][1]
         pred_dict_all_ratios = pred_results[name]
-        visualize_battery_combined(cycle_seq, true_data, pred_dict_all_ratios, name, out_path)
+        visualize_battery_combined(
+            cycle_seq,
+            true_data,
+            pred_dict_all_ratios,
+            name,
+            out_path,
+            y_label=y_label,
+            true_label=true_label,
+        )

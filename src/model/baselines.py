@@ -19,22 +19,29 @@ def _init_linear(layer, gain=1.234):
 class TunedXNet(nn.Module):
     """XNet variant used by the multi-model tuning experiment."""
 
-    def __init__(self, feature_size, hidden_dim=128, num_layers=3, cauchy_params=None):
+    def __init__(self, feature_size, hidden_dim=128, num_layers=3, cauchy_params=None,
+                 ablation_mode='full', use_layer_norm=False):
         super().__init__()
         cauchy_params = _cauchy_params_or_default(cauchy_params)
-        self.act = CauchyActivation(**cauchy_params)
+        self.act = CauchyActivation(**cauchy_params, ablation_mode=ablation_mode)
         self.layers = nn.ModuleList([nn.Linear(feature_size, hidden_dim)])
         for _ in range(num_layers - 1):
             self.layers.append(nn.Linear(hidden_dim, hidden_dim))
         self.out = nn.Linear(hidden_dim, 1)
+        self.layer_norms = nn.ModuleList(
+            [nn.LayerNorm(hidden_dim) for _ in range(num_layers)]
+        ) if use_layer_norm else None
 
         for layer in list(self.layers) + [self.out]:
             _init_linear(layer)
 
     def forward(self, x):
         x = x.squeeze(-1)
-        for layer in self.layers:
-            x = self.act(layer(x))
+        for i, layer in enumerate(self.layers):
+            x = layer(x)
+            if self.layer_norms is not None:
+                x = self.layer_norms[i](x)
+            x = self.act(x)
         return self.out(x)
 
 
@@ -189,8 +196,23 @@ class ResNetModel(nn.Module):
         return self.act(self.out(x))
 
 
+def _ablation_factory(ablation_mode, use_layer_norm=False):
+    """Return a constructor compatible with the (feature_size, hidden_dim, num_layers, cauchy_params) signature."""
+    def _build(feature_size, hidden_dim=128, num_layers=2, cauchy_params=None):
+        return TunedXNet(feature_size, hidden_dim, num_layers, cauchy_params,
+                         ablation_mode=ablation_mode, use_layer_norm=use_layer_norm)
+    return _build
+
+
 MODEL_REGISTRY = {
     "XNet": TunedXNet,
+    # Ablation variants
+    "XNet-Full":    _ablation_factory('full'),
+    "XNet-NoEven":  _ablation_factory('no_even'),
+    "XNet-NoOdd":   _ablation_factory('no_odd'),
+    "XNet-Fixed":   _ablation_factory('fixed_params'),
+    "XNet-LN":      _ablation_factory('full', use_layer_norm=True),
+    # Baselines
     "FC": FCModel,
     "LSTM": LSTMModel,
     "GRU": GRUModel,

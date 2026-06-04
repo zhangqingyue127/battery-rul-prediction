@@ -13,12 +13,6 @@ def _adaptive_ylim(values, metric):
     margin = (data_max - data_min) * 0.2 if data_max > data_min else max(abs(data_max) * 0.05, 1e-4)
     y_min = data_min - margin
     y_max = data_max + margin
-    if metric == 'r2':
-        y_min = max(0.9, y_min)
-        y_max = min(1.0, y_max)
-        if y_max - y_min < 0.002:
-            y_min -= 0.001
-            y_max += 0.001
     return y_min, y_max
 
 
@@ -85,15 +79,14 @@ def _draw_end_labels(ax, endpoints, style_dict, x_label):
 
 
 def plot_metrics_vs_ratio(ratios, final_results, out_path="."):
-    """Plot metrics vs training data ratio (RMSE/MAE/MAPE/R2)."""
+    """Plot metrics vs training data ratio (RMSE/MAE/MAPE)."""
     metrics_config = {
         'rmse': {'name': 'RMSE', 'ylabel': 'Average RMSE (Ah)'},
         'mae':  {'name': 'MAE',  'ylabel': 'Average MAE (Ah)'},
         'mape': {'name': 'MAPE', 'ylabel': 'Average MAPE (%)'},
-        'r2':   {'name': '$R^2$', 'ylabel': 'Average $R^2$'}
     }
-    metrics_order = ['rmse', 'mae', 'mape', 'r2']
-    labels = ['(a)', '(b)', '(c)', '(d)']
+    metrics_order = ['rmse', 'mae', 'mape']
+    labels = ['(a)', '(b)', '(c)']
     activation_list = list(final_results.keys())
 
     style_dict = {
@@ -106,9 +99,9 @@ def plot_metrics_vs_ratio(ratios, final_results, out_path="."):
     ratio_labels = [f'{int(r * 100)}%' for r in ratios]
     n_ratios = len(ratio_labels)
 
-    fig, axes = plt.subplots(2, 2, figsize=(12, 8), dpi=500)
+    fig, axes = plt.subplots(1, 3, figsize=(15, 4.5), dpi=500)
     axes = axes.flatten()
-    plt.subplots_adjust(left=0.08, right=0.92, bottom=0.12, top=0.92, wspace=0.2, hspace=0.4)
+    plt.subplots_adjust(left=0.06, right=0.94, bottom=0.22, top=0.90, wspace=0.28)
 
     for idx, (ax, metric) in enumerate(zip(axes, metrics_order)):
         all_valid_values = []
@@ -180,10 +173,9 @@ def plot_boxplot_metrics(final_scores_results, out_path="."):
         'rmse': {'name': 'RMSE', 'ylabel': 'RMSE (Ah)'},
         'mae':  {'name': 'MAE',  'ylabel': 'MAE (Ah)'},
         'mape': {'name': 'MAPE', 'ylabel': 'MAPE (%)'},
-        'r2':   {'name': '$R^2$', 'ylabel': '$R^2$'}
     }
-    metrics_order = ['rmse', 'mae', 'mape', 'r2']
-    labels = ['(a)', '(b)', '(c)', '(d)']
+    metrics_order = ['rmse', 'mae', 'mape']
+    labels = ['(a)', '(b)', '(c)']
     activation_list = ['cauchy', 'tanh', 'relu', 'gelu', 'leaky_relu']
 
     style_dict = {
@@ -194,9 +186,9 @@ def plot_boxplot_metrics(final_scores_results, out_path="."):
         'leaky_relu':  {'color': '#8ab07c', 'label': 'Leaky ReLU'}
     }
 
-    fig, axes = plt.subplots(2, 2, figsize=(12, 8), dpi=500)
+    fig, axes = plt.subplots(1, 3, figsize=(15, 4.5), dpi=500)
     axes = axes.flatten()
-    plt.subplots_adjust(left=0.08, right=0.95, bottom=0.10, top=0.94, wspace=0.2, hspace=0.22)
+    plt.subplots_adjust(left=0.06, right=0.98, bottom=0.20, top=0.92, wspace=0.25)
 
     for idx, (ax, metric) in enumerate(zip(axes, metrics_order)):
         box_data = [final_scores_results[act][metric] for act in activation_list]

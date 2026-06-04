@@ -73,7 +73,6 @@ def save_calce_experiment_results(final_results, save_dir):
                 "rmse": float(final_results[activation]["rmse"][index]),
                 "mae": float(final_results[activation]["mae"][index]),
                 "mape": float(final_results[activation]["mape"][index]),
-                "r2": float(final_results[activation]["r2"][index]),
             })
 
     csv_path = os.path.join(save_dir, "calce_experiment_metrics.csv")
@@ -144,7 +143,7 @@ def main():
 
     print("\nCALCE Experiment Results Summary")
     print("=" * 80)
-    for metric in ["rmse", "mae", "mape", "r2"]:
+    for metric in ["rmse", "mae", "mape"]:
         print(f"\n--- {metric.upper()} Metrics ---")
         header = f"{'Activation':<12}" + "".join(
             [f"{int(r * 100)}%".center(15) for r in CONFIG["train_ratios"]]
