@@ -12,11 +12,11 @@ Lithium-ion battery remaining useful life (RUL) prediction is a core technology 
 ## Authors
 | Name               | Role                                  | GitHub Profile                          |
 |--------------------|---------------------------------------|----------------------------------------|
-| **Qu Jinyan**      | Team Coordinator, XNet Architecture Design & Analysis | [@jinyan1qv-ui](https://github.com/jinyan1qv-ui) |
+| **Qu Jinyan**      | Team Coordinator, XNet Architecture Design & Analysis | - |
 | **Zhang Qingyue**  | Algorithm Implementation, Model Construction & Debugging (Core Code) | [@zhangqingyue127](https://github.com/zhangqingyue127) |
-| **Xu Xiaoying**    | Cauchy Activation Function Interpretation & Analysis & Paper Writing | [@xu101520](https://github.com/xu101520) |
-| **Li Xingyu**      | Evaluation Metrics Design & Paper Writing (Associate Programming) | [@Twinkle0214](https://github.com/Twinkle0214) |
-| **Zou Yalan**      | Data Collection & Preprocessing & Paper Writing (Associate Programming)      | [@Foodie585](https://github.com/Foodie585) |
+| **Xu Xiaoying**    | Cauchy Activation Function Interpretation & Analysis | - |
+| **Li Xingyu**      | Evaluation Metrics Design & Data Visualization (Associate Programming) | - |
+| **Zou Yalan**      | Data Collection & Preprocessing (Associate Programming)      | - |
 
 ## Framework Overview
 ### Model Architecture
@@ -37,7 +37,7 @@ where:
 ## Pipeline Overview
 The end-to-end workflow of our battery RUL prediction framework is illustrated below, covering data preparation, model training, validation, and evaluation:
 
-![Battery RUL Prediction Pipeline](pipeline_overview.png)
+![Battery RUL Prediction Pipeline](result/figure/pipeline_overview.png)
 
 ### Pipeline Components
 1. **Data Initialization & Preprocessing**  
@@ -47,7 +47,7 @@ The end-to-end workflow of our battery RUL prediction framework is illustrated b
 3. **Validation & Early Stopping**  
    Evaluate model performance on the validation set after each epoch, save the best-performing model, and trigger early stopping (patience = 20) to prevent overfitting.
 4. **Evaluation & Visualization**  
-   Test the final model on unseen data, compute key metrics (RMSE/MAE/MAPE/$R^2$), and generate academic plots for activation function comparison, capacity prediction curves, and metric distribution analysis.
+   Test the final model on unseen data, compute key metrics (RMSE/MAE/MAPE), and generate academic plots for activation function comparison, capacity prediction curves, and metric distribution analysis.
 
 ## Dataset
 ### Source
@@ -75,27 +75,27 @@ The code automatically parses `.mat` files and generates a cached `.npy` file (`
 ### Performance Metrics
 Average prediction metrics across 4 batteries (best results in bold):
 
-| Activation   | Train Ratio | RMSE (Ah) | MAE (Ah) | MAPE (%) | $R^2$  |
-|--------------|-------------|-----------|----------|----------|--------|
-| Cauchy       | 40%         | **0.0246** | **0.0175** | **1.11**  | **0.9743** |
-| Cauchy       | 50%         | 0.0279    | 0.0212   | 1.38     | 0.9680 |
-| Cauchy       | 60%         | 0.0256    | 0.0186   | 1.19     | 0.9714 |
-| Cauchy       | 70%         | 0.0260    | **0.0181** | **1.17**  | **0.9716** |
+| Activation   | Train Ratio | RMSE (Ah) | MAE (Ah) | MAPE (%) |
+|--------------|-------------|-----------|----------|----------|
+| Cauchy       | 40%         | **0.0246** | **0.0175** | **1.11** |
+| Cauchy       | 50%         | 0.0279    | 0.0212   | 1.38 |
+| Cauchy       | 60%         | 0.0256    | 0.0186   | 1.19 |
+| Cauchy       | 70%         | 0.0260    | **0.0181** | **1.17** |
 | ReLU         | 40%         | 0.0281    | 0.0208   | 1.33     | 0.9691 |
 | Tanh         | 40%         | 0.0309    | 0.0238   | 1.50     | 0.9631 |
 | GELU         | 40%         | 0.0264    | 0.0196   | 1.25     | 0.9713 |
 | Leaky ReLU   | 40%         | 0.0282    | 0.0221   | 1.43     | 0.9690 |
 
 ### Key Findings
-1. The proposed Cauchy activation function outperforms mainstream activation functions across all key metrics (RMSE, MAE, MAPE, $R^2$) for most training ratios.
-2. With only 40% training data, the Cauchy activation achieves an $R^2$ of 0.9743, demonstrating strong generalization capability under data scarcity.
+1. The proposed Cauchy activation function outperforms mainstream activation functions across direct error metrics (RMSE, MAE, MAPE) for most training ratios.
+2. With only 40% training data, the Cauchy activation keeps the lowest RMSE/MAE/MAPE, demonstrating strong generalization capability under data scarcity.
 3. The performance improvement stems from the Cauchy function's smooth non-linearity and resistance to extreme values (outliers in capacity degradation curves).
 
 ## Visualization Outputs
 All plots are automatically saved in `result/figure/` (PNG + PDF formats for academic publication):
 1. **Activation Function Characteristics**: Comparison of output curves for Cauchy/ReLU/Tanh/GELU/Leaky ReLU.
 2. **Battery Capacity Prediction Curves**: 2×2 subplots for each battery (4 training ratios, actual vs. predicted capacity).
-3. **Performance vs. Training Ratio**: Trend plots of RMSE/MAE/MAPE/$R^2$ across different training data ratios.
+3. **Performance vs. Training Ratio**: Trend plots of RMSE/MAE/MAPE across different training data ratios.
 4. **Metric Distribution Boxplots**: Statistical comparison of metric distributions across 5 activation functions.
 5. **Pipeline Flowchart**: End-to-end workflow diagram (this repository's `pipeline_overview.png`).
 
@@ -158,6 +158,16 @@ script, execute:
 python run_model_comparison.py
 ```
 
+To run the Gaussian-noise robustness ablation across activation functions, execute:
+```bash
+python run_noise_ablation.py
+```
+
+To run the clean-training vs. periodic noise-injected-training ablation, execute:
+```bash
+python run_noise_training_ablation.py
+```
+
 ### 4. View Results
 - **Visualization Plots**: `result/figure/` (all publication-quality plots)
 - **Metric Data**: `result/data_results/` (CSV/JSON files for quantitative analysis)
@@ -187,6 +197,21 @@ The model-comparison workflow is configured in `run_model_comparison.py`. It per
 an XNet hyperparameter search and then compares the best XNet against FC, LSTM, GRU,
 CNN, and ResNet baselines using the shared Cauchy activation.
 
+The noise-robustness workflow is configured in
+`src/training/noise_ablation.py`. It trains each activation on clean data and
+evaluates the best checkpoint under Gaussian noise levels injected into test
+input windows. Outputs are saved as `noise_ablation_results.json`,
+`noise_ablation_results.csv`, and `noise_ablation_per_battery_results.csv`,
+with corresponding PNG/PDF plots in `result/figure/`.
+
+The noise-training ablation in `run_noise_training_ablation.py` compares
+`clean_training` with `noise_injected_training`, where Gaussian noise is
+periodically injected into training input windows. It saves clean/noisy test
+summaries, per-battery metrics, and convergence histories to
+`noise_training_ablation_*.csv/json`, with convergence and RMSE comparison
+plots in `result/figure/`.
+
+
 ## Code Structure
 ```
 battery-rul-prediction/
@@ -204,7 +229,7 @@ battery-rul-prediction/
 │   │   ├── activation.py    # Cauchy + standard activation functions
 │   │   └── network.py       # XNet feedforward neural network
 │   ├── training/            # Training & evaluation module
-│   │   ├── metrics.py       # RMSE/MAE/MAPE/R² calculation
+│   │   ├── metrics.py       # RMSE/MAE/MAPE calculation
 │   │   └── trainer.py       # Training loop and experiment management
 │   └── visualization/       # Plot generation module
 │       ├── plot_activation.py  # Activation function characteristic plots
